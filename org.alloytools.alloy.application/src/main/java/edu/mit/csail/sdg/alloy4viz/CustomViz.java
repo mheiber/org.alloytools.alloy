@@ -9,15 +9,18 @@ import java.util.List;
 import java.util.Scanner;
 
 public class CustomViz {
+    private static String lastSrcFileStr = null;
+    public static void runNext(String tupleOutput) {
+        if (CustomViz.lastSrcFileStr != null) {
+            CustomViz.run(lastSrcFileStr, tupleOutput);
+        }
+    }
     public static void run(String srcFileStr, String tupleOutput) {
-        System.err.println("dbg1: srcFileStr");
-        System.err.println(srcFileStr);
-        System.err.println(tupleOutput);
+        CustomViz.lastSrcFileStr = srcFileStr;
         File srcFile = new File(srcFileStr);
         try {
             File tmpFile = File.createTempFile("temp", ".tmp");
             writeStringToFile(tmpFile, tupleOutput);
-        System.err.println("dbg2");
             
             Pattern pattern = Pattern.compile("@custom_visualization: (.*)");
             
@@ -31,7 +34,6 @@ public class CustomViz {
                 }
             }
             reader.close();
-        System.err.println("dbg3");
             
             if (customVisualizationLine != null) {
                 Matcher matcher = pattern.matcher(customVisualizationLine);
@@ -48,16 +50,15 @@ public class CustomViz {
                     processBuilder.directory(srcFile.getParentFile());
                     Process process = processBuilder.start();
                     
-                    System.err.println("dbg3");
-                    int _exitCode = process.waitFor();
-                    System.err.println("_exitCode");
+                    int exitCode = process.waitFor();
+                    if (exitCode != 0) {
+                        throw new IOException("bad exit code " + exitCode + " for " + commandParts.toString());
+                    }
                 }
             }
         } catch (IOException e) {
-        System.err.println("dbg3");
             e.printStackTrace();
         } catch (InterruptedException e) {
-        System.err.println("dbg4");
             e.printStackTrace();
         }
     }

@@ -848,6 +848,7 @@ public final class VizGUI implements ComponentListener {
     private void updateDisplay() {
         if (myStates.isEmpty())
             return;
+        this.renderNextToFile();
         // First, update the toolbar
         currentMode.set();
         for (JButton button : solutionButtons)
@@ -1301,9 +1302,14 @@ public final class VizGUI implements ComponentListener {
             content.setFont(OurUtil.getVizFont().deriveFont((float) fontSize));
     }
 
+    private String calcTupleOutput() {
+        return myStates.get(statepanes - 1).getOriginalInstance().originalA4.toString(current);
+    }
     public void renderToFile(String srcFile) {
-        String tupleOutput = myStates.get(statepanes - 1).getOriginalInstance().originalA4.toString(current);
-        CustomViz.run(srcFile, tupleOutput);
+        CustomViz.run(srcFile, this.calcTupleOutput());
+    }
+    public void renderNextToFile() {
+        CustomViz.runNext(this.calcTupleOutput());
     }
 
     /**
@@ -1748,6 +1754,22 @@ public final class VizGUI implements ComponentListener {
         current = normalize(current + 1, lmx, lox);
         updateDisplay();
         return null;
+    }
+
+    public void hackyDoNext() {
+        if (enumerator != null) {
+            System.err.println("dbg4");
+            try {
+                System.err.println("dbg5");
+                enumerator.compute(new String[] {
+                                                 xmlFileName, -3 + ""
+                });
+            } catch (Throwable ex) {
+                System.err.println("dbg6");
+                OurDialog.alert(frame, ex.getMessage());
+            }
+        }
+        updateDisplay();
     }
 
     /**

@@ -1378,6 +1378,13 @@ class AlloyTextDocumentService implements TextDocumentService, WorkspaceService,
 	// edu.mit.csail.sdg.alloy4whole.SimpleGUI.doVisualize(String) for handling
 	// instance visualization links
 
+    /**
+     * Used to discern whether we're called with the same arguments as last time.
+     * Enables us to provide the functionality of the Alloy Analyzer "New" button from VSCode:
+     * click the link to the instance or counterexample repeatedly to see more and more examples.
+     */
+	private String lastArg = "";
+
 	private void doVisualize(String arg) {
 		log("doVisualize() called with " + arg);
 		if (arg.startsWith("CORE: ")) { // CORE: filename
@@ -1450,6 +1457,10 @@ class AlloyTextDocumentService implements TextDocumentService, WorkspaceService,
 				viz = new VizGUI(false, "", null, enumerator, evaluator, 1);
 			viz.loadXML(Util.canon(arg.substring(5)), false);
             viz.renderToFile(AlloyLanguageServer.srcFilePath);
+            if (arg != this.lastArg) {
+                viz.hackyDoNext();
+            }
+            this.lastArg = arg;
 		}
 	}
 	
