@@ -178,6 +178,7 @@ import static edu.mit.csail.sdg.alloy4whole.Lsp4jUtil.*;
 import static edu.mit.csail.sdg.alloy4whole.AlloyLSMessageType.*;
 public class AlloyLanguageServer implements LanguageServer, LanguageClientAware {
 
+    public static String srcFilePath = null;
 	private AlloyLanguageClient client;
 	private AlloyTextDocumentService alloyTextDocumentService;
 
@@ -291,6 +292,7 @@ class AlloyTextDocumentService implements TextDocumentService, WorkspaceService,
 		
 		try {
 			String path = fileUriToPath(uri);
+            AlloyLanguageServer.srcFilePath = path;
 			
 			// Try to return a nullModule object for non-AlloyMarkdown files.
 			// Not a big deal if the file has not been cached
@@ -540,6 +542,7 @@ class AlloyTextDocumentService implements TextDocumentService, WorkspaceService,
 			return CompletableFuture.completedFuture(null);
 		}
 	}
+
 
 	private List<SymbolInformation> folderSymbols(String dir){
 		List<SymbolInformation> res = new ArrayList<>();
@@ -1446,6 +1449,7 @@ class AlloyTextDocumentService implements TextDocumentService, WorkspaceService,
 			if(viz == null)
 				viz = new VizGUI(false, "", null, enumerator, evaluator, 1);
 			viz.loadXML(Util.canon(arg.substring(5)), false);
+            viz.renderToFile(AlloyLanguageServer.srcFilePath);
 		}
 	}
 	

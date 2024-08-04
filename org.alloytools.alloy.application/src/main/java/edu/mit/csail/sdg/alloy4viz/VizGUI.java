@@ -42,6 +42,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Path2D;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -1298,6 +1299,11 @@ public final class VizGUI implements ComponentListener {
             updateDisplay();
         else
             content.setFont(OurUtil.getVizFont().deriveFont((float) fontSize));
+    }
+
+    public void renderToFile(String srcFile) {
+        String tupleOutput = myStates.get(statepanes - 1).getOriginalInstance().originalA4.toString(current);
+        CustomViz.run(srcFile, tupleOutput);
     }
 
     /**
