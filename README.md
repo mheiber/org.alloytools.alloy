@@ -7,7 +7,7 @@ All you need to run Alloy with custom visualizations.
 
 ![screnshot](./screenshot.png)
 
-Demo:
+Demo: [./demo.mov](./demo.mov)
 
 <video alt="demo" src="./demo.mov"></video>
 
@@ -70,6 +70,7 @@ If you want to create your own visualizations, here is the format of the metadat
 
 ## How to hack on this hack of a hack for Hack
 
+> Warning: code optimized for expedience rather than maintainability
 
 This is a fork of [A fork of Alloy that adds a language server](https://github.com/s-arash/org.alloytools.alloy), see there for full instructions on how to build. The quick version is: `./gradlew build`.
 
